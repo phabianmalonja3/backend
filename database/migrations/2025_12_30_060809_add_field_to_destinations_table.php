@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('destinations', function (Blueprint $table) {
             $table->string("image_url");
-            $table->boolean("status")->default(true);
+           
         });
     }
 

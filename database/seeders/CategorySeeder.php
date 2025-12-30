@@ -18,9 +18,7 @@ class CategorySeeder extends Seeder
             \App\Models\Category::create(['name' => $name]);
         }
 
-        $this->call([
-            CategorySeeder::class
-        ]);
+       
         
     }
 }

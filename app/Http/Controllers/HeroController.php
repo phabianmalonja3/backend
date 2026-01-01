@@ -34,12 +34,10 @@ class HeroController extends Controller
     public function store(Request $request)
     {
 
-         $data = $request->validate([
+$data = $request->validate([
 "title"=>['required','string'],
 "subtitle"=>['required','string'],
-"image"=>["required",'image']
-
-        ]);
+"image"=>["required",'image']]);
 
       
 $data['image']= $request->file('image')->store('heroes', 'public');
@@ -48,11 +46,10 @@ $data['image']= $request->file('image')->store('heroes', 'public');
         "title"=>$request->title,
         "subtitle"=>$request->subtitle,
         "image_url"=>$data['image']
-
        ]);
 
        return response()->json([
-        "destination"=>$hero
+        "hero"=>$hero
        ]);
         
     }

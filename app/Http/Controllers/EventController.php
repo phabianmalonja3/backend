@@ -11,14 +11,33 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $events = Event::all();
 
-        return response()->json([
-            "events"=>$events
-        ]); 
+
+public function index(Request $request)
+{
+    // 1. Start query with eager loading the 'category' relationship
+    // This assumes you have a public function category() in your Event model
+    $query = Event::with(['category']);
+
+    // 2. Filter by category_id
+    if ($request->has('category_id')) {
+        $query->where('category_id', $request->category_id);
     }
+
+    // 3. Exclude current event
+    if ($request->has('exclude')) {
+        $query->where('id', '!=', $request->exclude);
+    }
+
+    // 4. Limit and Sort
+    $limit = $request->query('limit', 100);
+    $events = $query->latest()->limit($limit)->get();
+
+    return response()->json([
+        "events" => $events
+    ]);
+}
+    
 
     /**
      * Show the form for creating a new resource.

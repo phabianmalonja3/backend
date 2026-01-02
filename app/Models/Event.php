@@ -26,4 +26,10 @@ class Event extends Model
             "images"=>"array"
         ];
     }
+
+    public function category()
+{
+    
+    return $this->belongsTo(Category::class, 'category_id');
+}
 }

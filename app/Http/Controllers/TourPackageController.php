@@ -14,15 +14,25 @@ class TourPackageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $packages = TourPackage::with("location")->latest()->get();
+  public function index(Request $request, $locationName = null)
+{
+    $query = TourPackage::with("location");
 
-        return response()->json([
-            "packages"=>$packages
-        ]);
+    // If a location name is passed in the URL or as a query param
+    if ($locationName) {
+        $query->whereHas('location', function ($q) use ($locationName) {
+            // Using 'like' makes it more flexible (e.g., 'zanzibar' matches 'Zanzibar')
+            $q->where('name', 'like', '%' . $locationName . '%');
+        });
     }
 
+    $packages = $query->latest()->get();
+
+    return response()->json([
+        "packages" => $packages,
+        "current_location" => $locationName // Useful for UI headers
+    ]);
+}
 
 
     public function store(Request $request)

@@ -17,4 +17,13 @@ class Location extends Model
         'type',
         'is_featured',
     ];
+
+
+        public function packages():hasMany
+{
+    return $this->hasMany(TourPackage::class);
+
+
+
+}
 }

@@ -9,7 +9,17 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class TourPackage extends Model
 {
     use HasUuids;
-    protected $fillable = ["name","price",'options','image_url','active','location'];
+    protected $table="packages";
+ protected $fillable = [
+        'name',
+        'price',
+        'options',
+        'image_url',
+        'active',
+        'location_id',
+    ];
+
+    
   protected function imageUrl(): Attribute
 {
     return Attribute::make(
@@ -22,8 +32,16 @@ class TourPackage extends Model
    protected function casts(): array
     {
         return [
-            "options"=>"array"
+           'options' => 'array',
+        'active' => 'boolean',
+        'price' => 'decimal:2',
         ];
     }
+
+    public function location()
+{
+    return $this->belongsTo(Location::class);
+
+}
     
 }

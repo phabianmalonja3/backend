@@ -16,66 +16,52 @@ class TourPackageController extends Controller
      */
     public function index()
     {
-        $packages = TourPackage::latest()->get();
+        $packages = TourPackage::with("location")->latest()->get();
 
         return response()->json([
             "packages"=>$packages
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
+        // 1. Validation (Highly recommended to prevent 500 errors)
+        $request->validate([
+            'name' => 'required|string',
+            'price' => 'required|numeric',
+            'location_id' => 'required|exists:locations,id',
+            'image' => 'required|image'
+        ]);
 
-    $request->validate([
-    'image' => ['required','image'],
-    'price' => ['required',"numeric"],
-    "name"=>['string','required'],
-    "location"=>["required","string"]
+        $options = [];
+        // Map the IDs coming from frontend to actual names/values
+        if ($request->has("options")) {
+            foreach ($request->get("options") as $optionId) {
+                $option = PackageOption::find($optionId);
+                if ($option) {
+                    $options[] = $option->options; 
+                }
+            }
+        }
 
-]);
+        $path = $request->file('image')->store('packages', 'public');
 
+        // 2. Create with UUID
+        $pk = TourPackage::create([ // Generate the UUID here
+            "name" => $request->name,
+            "price" => $request->price,
+            "image_url" => $path,
+            "options" => $options, // Laravel will JSON encode this via Model cast
+            "location_id" => $request->location_id,
+            "active" => true
+        ]);
 
-
-
-$options= [];
-
-if($request->has("options")){
-foreach ($request->get("options") as $option) {
-    $options[] = PackageOption::findOrFail($option)->options;
-}
-
-}
-
-
-
-
-
-// Handle file upload
-$path = $request->file('image')->store('packages', 'public');
-
-$pk =TourPackage::create([
-    "name"=>$request->name,
-    "price"=>$request->price,
-    "image_url"=>$path,
-    "options"=>$options,
-    "location"=>$request->location
-]);
-
-return response()->json([
-    "package"=>$pk
-]);    
+        return response()->json(["package" => $pk], 201);
     }
+
+
 
     /**
      * Display the specified resource.

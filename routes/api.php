@@ -15,3 +15,4 @@ Route::resource("/heroes",App\Http\Controllers\HeroController::class);
 Route::resource("/options",App\Http\Controllers\PackageOptionController::class);
 Route::resource("/packages",App\Http\Controllers\TourPackageController::class);
 Route::resource("/events",App\Http\Controllers\EventController::class);
+Route::resource("/locations",App\Http\Controllers\LocationController::class);

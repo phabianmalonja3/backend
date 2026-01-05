@@ -14,23 +14,33 @@ class TourPackageController extends Controller
     /**
      * Display a listing of the resource.
      */
-  public function index(Request $request, $locationName = null)
+public function index(Request $request)
 {
-    $query = TourPackage::with("location");
+    // Start the query with the location relationship
+    $query = TourPackage::with("location")->where('active', true);
 
-    // If a location name is passed in the URL or as a query param
-    if ($locationName) {
-        $query->whereHas('location', function ($q) use ($locationName) {
-            // Using 'like' makes it more flexible (e.g., 'zanzibar' matches 'Zanzibar')
-            $q->where('name', 'like', '%' . $locationName . '%');
+    // 1. Check if the 'package' query parameter exists (e.g., ?package=zanzibar)
+    if ($request->has('package')) {
+        $locationSearch = $request->query('package');
+
+        $query->whereHas('location', function ($q) use ($locationSearch) {
+            // Searching by location name or slug
+            $q->where('name', 'like', '%' . $locationSearch . '%')
+              ->orWhere('slug', 'like', '%' . $locationSearch . '%');
         });
+    }
+
+    // 2. You can also add a general search for the package name itself
+    if ($request->has('search')) {
+        $query->where('name', 'like', '%' . $request->query('search') . '%');
     }
 
     $packages = $query->latest()->get();
 
     return response()->json([
         "packages" => $packages,
-        "current_location" => $locationName // Useful for UI headers
+        "filters_applied" => $request->only(['package', 'search']),
+        "count" => $packages->count()
     ]);
 }
 

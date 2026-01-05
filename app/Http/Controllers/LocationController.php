@@ -36,15 +36,10 @@ class LocationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
-{
-    // Eager load relationships
-    $package = TourPackage::with(['location'])->findOrFail($id);
-
-    return response()->json([
-        'package' => $package
-    ]);
-}
+    public function show(Location $location)
+    {
+        //
+    }
 
     /**
      * Show the form for editing the specified resource.

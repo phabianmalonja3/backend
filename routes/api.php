@@ -13,7 +13,6 @@ Route::resource("/galleries",App\Http\Controllers\GalleryController::class);
 Route::resource("/destinations",App\Http\Controllers\DestinationController::class);
 Route::resource("/heroes",App\Http\Controllers\HeroController::class);
 Route::resource("/options",App\Http\Controllers\PackageOptionController::class);
-Route::get('/packages/show/{location?}', [TourPackageController::class, 'index']);
 Route::resource("/packages",App\Http\Controllers\TourPackageController::class);
 Route::resource("/events",App\Http\Controllers\EventController::class);
 Route::resource("/locations",App\Http\Controllers\LocationController::class);

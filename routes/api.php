@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,3 +17,4 @@ Route::resource("/options",App\Http\Controllers\PackageOptionController::class);
 Route::resource("/packages",App\Http\Controllers\TourPackageController::class);
 Route::resource("/events",App\Http\Controllers\EventController::class);
 Route::resource("/locations",App\Http\Controllers\LocationController::class);
+Route::resource('/bookings', BookingController::class);

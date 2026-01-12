@@ -144,4 +144,24 @@ public function update(Request $request, $id)
     {
         //
     }
+
+    public function checkStatus(Request $request)
+    {
+        $request->validate([
+            'reference' => 'required|string',
+            'email' => 'required|email',
+        ]);
+
+        // Find booking where BOTH reference and email match
+        $booking = Booking::with('package:id,name') // Assuming relationship exists
+            ->where('booking_reference', $request->reference)
+            ->where('email', $request->email)
+            ->first();
+
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+
+        return response()->json($booking);
+    }
 }

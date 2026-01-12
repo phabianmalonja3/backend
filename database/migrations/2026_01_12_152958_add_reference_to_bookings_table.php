@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-        $table->string('status')->default('pending')->after('total_price');
+            $table->string('booking_reference', 12)->unique()->after('id')->nullable();
         });
     }
 

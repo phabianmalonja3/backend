@@ -116,10 +116,26 @@ class BookingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Booking $booking)
-    {
-        //
-    }
+   // app/Http/Controllers/BookingController.php
+
+public function update(Request $request, $id)
+{
+    $booking = Booking::findOrFail($id);
+
+    // Validate the incoming status
+    $validated = $request->validate([
+        'status' => 'required|in:pending,confirmed,cancelled'
+    ]);
+
+    $booking->update([
+        'status' => $validated['status']
+    ]);
+
+    return response()->json([
+        'message' => 'Booking updated successfully',
+        'booking' => $booking
+    ]);
+}
 
     /**
      * Remove the specified resource from storage.

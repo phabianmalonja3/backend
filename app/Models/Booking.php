@@ -18,15 +18,17 @@ protected $fillable = [
     'email', 
     'travel_date', 
     'guest_counts', 
-    'total_price'
+    'total_price',
+    "status"
 ];
 
 
        protected function casts(): array
     {
         return [
-            'guest_counts' => 'array',
+        'guest_counts' => 'array',
         'travel_date' => 'date',
+        'total_price'  => 'decimal:2',
         ];
     }
 

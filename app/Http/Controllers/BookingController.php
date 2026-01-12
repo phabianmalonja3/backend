@@ -148,7 +148,7 @@ public function update(Request $request, $id)
     public function checkStatus(Request $request)
     {
         $request->validate([
-            'reference' => 'required|string',
+            'reference' => 'required',
             
         ]);
 

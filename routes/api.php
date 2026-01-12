@@ -18,4 +18,4 @@ Route::resource("/packages",App\Http\Controllers\TourPackageController::class);
 Route::resource("/events",App\Http\Controllers\EventController::class);
 Route::resource("/locations",App\Http\Controllers\LocationController::class);
 Route::resource('/bookings', BookingController::class);
-Route::get('/booking-check', [BookingController::class, 'checkStatus']);
+Route::get('/booking', [BookingController::class, 'checkStatus']);

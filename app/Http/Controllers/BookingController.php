@@ -13,10 +13,15 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
+  public function index(Request $request)
+{
+    $bookings = Booking::with('package') 
+        ->latest()
+        ->paginate(10);
+
+    // Return as JSON for your Next.js frontend
+    return response()->json($bookings);
+}
 
     /**
      * Show the form for creating a new resource.

@@ -149,13 +149,12 @@ public function update(Request $request, $id)
     {
         $request->validate([
             'reference' => 'required|string',
-            'email' => 'required|email',
+            
         ]);
 
         // Find booking where BOTH reference and email match
         $booking = Booking::with('package:id,name') // Assuming relationship exists
             ->where('booking_reference', $request->reference)
-            ->where('email', $request->email)
             ->first();
 
         if (!$booking) {

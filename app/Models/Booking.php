@@ -9,8 +9,17 @@ class Booking extends Model
 {
     use HasUuids;
 
-public $incrementing = false;
-protected $keyType = 'string';
+
+
+protected $fillable = [
+    'package_id', 
+    'first_name', 
+    'last_name', 
+    'email', 
+    'travel_date', 
+    'guest_counts', 
+    'total_price'
+];
 
 
        protected function casts(): array

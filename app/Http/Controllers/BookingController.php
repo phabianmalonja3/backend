@@ -92,10 +92,13 @@ class BookingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Booking $booking)
-    {
-        //
-    }
+   public function show($id)
+{
+    // Eager load the package to show the name/title
+    $booking = Booking::with('package')->findOrFail($id);
+
+    return response()->json($booking);
+}
 
     /**
      * Show the form for editing the specified resource.

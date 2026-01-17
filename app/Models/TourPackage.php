@@ -11,14 +11,15 @@ class TourPackage extends Model
     use HasUuids;
     protected $table="packages";
  protected $fillable = [
-        'name',
-        'price',
-        'options',
-        'image_url',
-        'active',
-        'location_id',
-    ];
-
+    'name', 
+    'price', 
+    'days',     // Add this
+    'nights',   // Add this
+    'image_url', 
+    'options', 
+    'location_id', 
+    'active'
+];
     
   protected function imageUrl(): Attribute
 {

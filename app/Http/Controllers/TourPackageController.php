@@ -45,41 +45,46 @@ public function index(Request $request)
 }
 
 
-    public function store(Request $request)
-    {
-        // 1. Validation (Highly recommended to prevent 500 errors)
-        $request->validate([
-            'name' => 'required|string',
-            'price' => 'required|numeric',
-            'location_id' => 'required|exists:locations,id',
-            'image' => 'required|image'
-        ]);
+ public function store(Request $request)
+{
+    // 1. Validation (Updated with days and nights)
+    $request->validate([
+        'name'        => 'required|string',
+        'price'       => 'required|numeric',
+        'days'        => 'required|integer|min:0',    // Added validation
+        'nights'      => 'required|integer|min:0',  // Added validation
+        'location_id' => 'required|exists:locations,id',
+        'image'       => 'required|image|max:2048' // Recommended to limit size
+    ]);
 
-        $options = [];
-        // Map the IDs coming from frontend to actual names/values
-        if ($request->has("options")) {
-            foreach ($request->get("options") as $optionId) {
-                $option = PackageOption::find($optionId);
-                if ($option) {
-                    $options[] = $option->options; 
-                }
+    $options = [];
+    // Map the IDs coming from frontend to actual names/values
+    if ($request->has("options")) {
+        foreach ($request->get("options") as $optionId) {
+            $option = PackageOption::find($optionId);
+            if ($option) {
+                $options[] = $option->options; 
             }
         }
-
-        $path = $request->file('image')->store('packages', 'public');
-
-        // 2. Create with UUID
-        $pk = TourPackage::create([ // Generate the UUID here
-            "name" => $request->name,
-            "price" => $request->price,
-            "image_url" => $path,
-            "options" => $options, // Laravel will JSON encode this via Model cast
-            "location_id" => $request->location_id,
-            "active" => true
-        ]);
-
-        return response()->json(["package" => $pk], 201);
     }
+
+    // Handle File Upload
+    $path = $request->file('image')->store('packages', 'public');
+
+    // 2. Create the record
+    $pk = TourPackage::create([
+        "name"        => $request->name,
+        "price"       => $request->price,
+        "days"        => $request->days,       // Save days
+        "nights"      => $request->nights,     // Save nights
+        "image_url"   => $path,
+        "options"     => $options,             // Cast to JSON in Model
+        "location_id" => $request->location_id,
+        "active"      => true
+    ]);
+
+    return response()->json(["package" => $pk], 201);
+}
 
 
 

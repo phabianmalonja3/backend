@@ -19,11 +19,9 @@ class Location extends Model
     ];
 
 
-        public function packages():hasMany
+        public function packages()
 {
     return $this->hasMany(TourPackage::class);
-
-
 
 }
 }

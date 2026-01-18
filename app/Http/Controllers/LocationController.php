@@ -13,7 +13,7 @@ class LocationController extends Controller
     public function index()
     {
         return response()->json( [
-            "locations"=>Location::all()
+            "locations"=>Location::with('packages')->latest()->get()
         ]);
     }
 

@@ -26,6 +26,8 @@ protected function imagePath(): Attribute
     );
 }
 
+
+
 public function category()
 {
     return $this->belongsTo(Category::class);

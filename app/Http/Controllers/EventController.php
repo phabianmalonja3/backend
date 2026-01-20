@@ -62,24 +62,31 @@ public function store(Request $request)
         'category_id'  => ['required', 'exists:categories,id'],
     ]);
 
-    $imageUrls = [];
+ $imageUrls = [];
 
-    // 2. Handle File Uploads
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $file) {
-            // Store the file and get the path (e.g., 'events/filename.jpg')
-            $path = $file->store('events', 'public');
-            
-            // Generate the full URL for the frontend
-            $imageUrls[] = asset('storage/' . $path);
+if ($request->hasFile('images')) {
+    foreach ($request->file('images') as $file) {
+
+        // Ensure the file is valid
+        if (!$file->isValid()) {
+            continue;
+        }
+
+        // Store image
+        $path = $file->store('events', 'public');
+
+        // Extra safety check
+        if ($path) {
+            $imageUrls[] = url('storage/' . $path);
         }
     }
+}
 
     // 3. Create Event
     $event = Event::create([
         "title"       => $validated['title'],
         "descriptions" => $validated['description'],
-        "images"      => $imageUrls, // Ensure your Model has 'images' in $casts as array
+        "images"      => $imageUrls,
         "category_id" => $validated['category_id'],
         "location"    => $validated['location']
     ]);

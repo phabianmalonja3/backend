@@ -24,5 +24,11 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
+        $this->call([
+            CategorySeeder::class,
+            LocationSeeder::class,
+            OptionSeeder::class
+        ]);
+
     }
 }
